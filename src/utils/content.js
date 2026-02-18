@@ -57,7 +57,7 @@ leaves nothing to embrace`,
       slug: "learning-discernment",
       title: "Learning Discernment",
       date: "2023-01-20",
-      category: "poetry",
+      category: "prose",
       excerpt: "you can only help people who want to be helped...",
       content: `you can only help people who want to be helped ~ 
 
