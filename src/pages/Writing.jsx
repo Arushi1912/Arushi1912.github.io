@@ -32,7 +32,7 @@ const Writing = () => {
                 <span className="capitalize">{piece.category}</span>
               </div>
 
-              <h2 className="text-3xl font-serif font-semibold text-slate mb-4 group-hover:text-emerald-deep transition-colors">
+              <h2 className="text-3xl font-serif font-semibold text-slate-blue mb-4 group-hover:text-emerald-deep transition-colors">
                 {piece.title}
               </h2>
 

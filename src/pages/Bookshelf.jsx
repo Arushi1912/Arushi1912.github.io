@@ -71,7 +71,7 @@ const Bookshelf = () => {
 
         {/* Currently Reading */}
         <div className="mb-24">
-          <h2 className="text-3xl font-semibold text-slate mb-8">
+          <h2 className="text-3xl font-semibold text-slate-blue mb-8">
             Currently Reading
           </h2>
 
@@ -87,7 +87,7 @@ const Bookshelf = () => {
                     />
                   </div>
                   <div className="p-8 md:p-10 md:w-3/4">
-                    <h3 className="text-2xl font-semibold text-slate mb-2">
+                    <h3 className="text-2xl font-semibold text-slate-blue mb-2">
                       {book.title}
                     </h3>
                     <p className="text-lg text-slate/70 mb-4">
@@ -111,7 +111,7 @@ const Bookshelf = () => {
         {/* Previously Read This Year */}
         {previouslyReadThisYear.length > 0 && (
           <div className="mb-24">
-            <h2 className="text-3xl font-semibold text-slate mb-8">
+            <h2 className="text-3xl font-semibold text-slate-blue mb-8">
               Previously Read
             </h2>
 
@@ -168,7 +168,7 @@ const Bookshelf = () => {
           .sort(([a], [b]) => parseInt(b) - parseInt(a)) // Sort years in descending order
           .map(([year, books]) => (
             <div key={year} className="mb-16">
-              <h2 className="text-3xl font-semibold text-slate mb-8">
+              <h2 className="text-3xl font-semibold text-slate-blue mb-8">
                 Previously Read in {year}
               </h2>
 
@@ -187,7 +187,7 @@ const Bookshelf = () => {
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-slate mb-1">
+                        <h3 className="text-xl font-semibold text-slate-blue mb-1">
                           {book.title}
                         </h3>
                         <p className="text-sm text-slate/60 mb-2">

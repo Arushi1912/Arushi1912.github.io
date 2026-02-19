@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Landing = () => {
   return (
-    <div className="min-h-screen bg-beige py-12 px-6 flex items-center">
+    <div className="min-h-screen bg-beige pt-28 pb-12 px-6 flex items-center">
       <div className="w-full max-w-6xl mx-auto">
         {/* Hero Section with Image and Text Side by Side */}
         <div className="flex flex-col md:flex-row items-start gap-16 mb-16">

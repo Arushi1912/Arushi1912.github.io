@@ -72,7 +72,7 @@ const Work = () => {
                   {project.icon}
                 </div>
                 <div className="p-8 md:p-10 md:w-3/4">
-                  <h3 className="text-3xl font-semibold text-slate mb-4">
+                  <h3 className="text-3xl font-semibold text-slate-blue mb-4">
                     {project.title}
                   </h3>
                   <p className="text-slate/70 mb-6 leading-relaxed">
@@ -128,7 +128,7 @@ const Work = () => {
 
         {/* Skills */}
         <div>
-          <h2 className="text-3xl font-semibold text-slate text-center mb-12">
+          <h2 className="text-3xl font-semibold text-slate-blue text-center mb-12">
             Technologies & Tools
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
