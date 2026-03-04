@@ -17,7 +17,7 @@ const Landing = () => {
           </div>
 
           <div className="flex-1">
-            <h1 className="text-5xl md:text-6xl font-serif font-bold text-slate-blue mb-5 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-serif font-bold text-slate-blue mb-5 leading-tight animate-fade-in-up">
               Hi there
             </h1>
             <p className="text-lg text-slate/80 leading-relaxed mb-3">
@@ -50,10 +50,10 @@ const Landing = () => {
       {/* ── Pinball Section ── */}
       <div className="flex flex-col items-center mb-16">
         <h2 className="text-3xl md:text-4xl font-serif font-semibold text-slate-blue mb-2 text-center">
-          While you're here&hellip;
+          To thank you for being here &hellip;
         </h2>
         <p className="text-lg text-slate/60 mb-8 text-center">
-          let's make this fun.
+          I made 'getting to know me' a bit more fun.
         </p>
 
         <PinballGame />

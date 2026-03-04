@@ -21,7 +21,6 @@ const COLORS = {
   flipper: "#1a252f",
   ball: "#C9A227",
   ballStroke: "#a8851e",
-  bumperDefault: "#0F766E",
   bumperHit: "#C9A227",
   bumperText: "#FFF9E6",
   peg: "#1E3A5F",
@@ -29,10 +28,50 @@ const COLORS = {
 };
 
 const BUMPER_TARGETS = [
-  { id: "work", label: "Work", route: "/work" },
-  { id: "writing", label: "Writing", route: "/writing" },
-  { id: "bookshelf", label: "Bookshelf", route: "/bookshelf" },
-  { id: "learning", label: "Learning", route: null },
+  {
+    id: "work",
+    label: "Work",
+    route: "/work",
+    tab: true,
+    style: {
+      fillStyle: "#0F766E",
+      strokeStyle: "#0a5c56",
+      lineWidth: 3,
+    },
+  },
+  {
+    id: "writing",
+    label: "Writing",
+    route: "/writing",
+    tab: true,
+    style: {
+      fillStyle: "#0F766E",
+      strokeStyle: "#0a5c56",
+      lineWidth: 3,
+    },
+  },
+  {
+    id: "bookshelf",
+    label: "Bookshelf",
+    route: "/bookshelf",
+    tab: true,
+    style: {
+      fillStyle: "#0F766E",
+      strokeStyle: "#0a5c56",
+      lineWidth: 3,
+    },
+  },
+  {
+    id: "learning",
+    label: "Learning",
+    route: null,
+    tab: false,
+    style: {
+      fillStyle: "#c92222",
+      strokeStyle: "#0a5c56",
+      lineWidth: 3,
+    },
+  },
 ];
 
 const BUMPER_FACTS = {
@@ -305,10 +344,16 @@ function createBumpers(config) {
   ];
 
   return positions.map((pos, i) => {
+    const target = BUMPER_TARGETS[i];
+
     const bumper = Bodies.circle(pos.x, pos.y, config.BUMPER_R, {
-      ...createBodyOptions("bumper"),
+      isStatic: true,
+      restitution: 2.0,
+      render: target.style,
+      collisionFilter: { category: COLLISION_CATEGORIES.WALL },
       label: `bumper-${i}`,
     });
+
     bumper._targetIndex = i;
     bumper._hitTime = 0;
     return bumper;
@@ -525,11 +570,14 @@ export default function PinballGame() {
           if (now - bumper._hitTime < 500) continue;
           bumper._hitTime = now;
 
+          const target = BUMPER_TARGETS[bumper._targetIndex];
+          const originalStyle = target.style;
+
           bumper.render.fillStyle = COLORS.bumperHit;
           bumper.render.lineWidth = 5;
           setTimeout(() => {
-            bumper.render.fillStyle = COLORS.bumperDefault;
-            bumper.render.lineWidth = 3;
+            bumper.render.fillStyle = originalStyle.fillStyle;
+            bumper.render.lineWidth = originalStyle.lineWidth;
           }, 350);
 
           const dir = Vector.normalise(
@@ -735,10 +783,13 @@ export default function PinballGame() {
         e.preventDefault();
         keysRef.current.right = true;
       }
-      if (e.key === " " && !e.repeat && waitingToLaunchRef.current) {
-        e.preventDefault();
-        chargeStartRef.current = Date.now();
-        chargingRef.current = true;
+      if (e.key === " ") {
+        e.preventDefault(); // Always prevent scroll, regardless of game state
+        if (!e.repeat && waitingToLaunchRef.current) {
+          // game logic only runs when conditions are met
+          chargeStartRef.current = Date.now();
+          chargingRef.current = true;
+        }
       }
     };
     const onKeyUp = (e) => {
@@ -780,9 +831,9 @@ export default function PinballGame() {
 
   return (
     <div className="flex flex-col items-center gap-3 w-full max-w-6xl mx-auto px-4">
-      {/* Main layout: table + peek cards side by side on desktop */}
-      <div className="flex flex-col lg:flex-row items-start justify-center gap-4 w-full">
-        {/* Pinball table */}
+      {/* Main layout: centered table with absolutely positioned cards */}
+      <div className="relative flex justify-center">
+        {/* Pinball table - always centered */}
         <div className="relative flex-shrink-0">
           <div
             ref={canvasRef}
@@ -822,9 +873,9 @@ export default function PinballGame() {
           )}
         </div>
 
-        {/* Peek cards sidebar */}
+        {/* Desktop cards - absolutely positioned to the right */}
         {discoveredCards.length > 0 && (
-          <div className="w-full lg:w-52 flex flex-row lg:flex-col gap-3 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 lg:pt-2">
+          <div className="absolute left-full top-0 ml-4 w-52 hidden lg:flex flex-col gap-3 pt-2">
             {discoveredCards.map((card) => {
               const inner = (
                 <>
@@ -834,9 +885,9 @@ export default function PinballGame() {
                     </span>
                   </div>
                   <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
-                    {card.route ? card.snippet : `"${card.snippet}"`}
+                    {card.snippet}
                   </p>
-                  {card.route && (
+                  {card.tab && (
                     <span className="text-emerald-deep text-[11px] font-medium mt-1.5 inline-block">
                       Visit &rarr;
                     </span>
@@ -847,7 +898,7 @@ export default function PinballGame() {
               const className =
                 "animate-slide-in min-w-[160px] lg:min-w-0 bg-cream border border-gold-muted/40 rounded-xl p-3 shadow-md hover:border-gold hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer block";
 
-              return card.route ? (
+              return card.tab ? (
                 <Link key={card.id} to={card.route} className={className}>
                   {inner}
                 </Link>
@@ -888,6 +939,52 @@ export default function PinballGame() {
           FLIP ▶
         </button>
       </div>
+
+      {/* Mobile cards - below the game */}
+      {/* Mobile cards - show only the most recent card */}
+      {discoveredCards.length > 0 && (
+        <div className="w-full lg:hidden">
+          {(() => {
+            const card = discoveredCards[discoveredCards.length - 1];
+            const inner = (
+              <>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-slate-blue text-sm">
+                    {card.label}
+                  </span>
+                </div>
+                <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
+                  {card.tab ? card.snippet : `"${card.snippet}"`}
+                </p>
+                {card.tab && (
+                  <span className="text-emerald-deep text-[11px] font-medium mt-1.5 inline-block">
+                    Visit &rarr;
+                  </span>
+                )}
+              </>
+            );
+
+            const className =
+              "animate-slide-in bg-cream border border-gold-muted/40 rounded-xl p-3 shadow-md hover:border-gold hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer block w-full";
+
+            return card.tab ? (
+              <Link key={card.id} to={card.route} className={className}>
+                {inner}
+              </Link>
+            ) : (
+              <div
+                key={card.id}
+                className={className.replace(
+                  "cursor-pointer",
+                  "cursor-default",
+                )}
+              >
+                {inner}
+              </div>
+            );
+          })()}
+        </div>
+      )}
 
       <p className="text-slate/50 text-xs text-center mt-1">
         <span className="hidden lg:inline">
