@@ -367,7 +367,6 @@ function createFlippers(config) {
     frictionAir: 0.02,
     restitution: 0.1,
     render: { fillStyle: COLORS.flipper, strokeStyle: "#0f1a24", lineWidth: 1 },
-    chamfer: { radius: 5 * config.SCALE },
     collisionFilter: {
       category: COLLISION_CATEGORIES.FLIPPER,
       mask: COLLISION_CATEGORIES.BALL,
@@ -375,10 +374,16 @@ function createFlippers(config) {
   };
   const y = config.TABLE_H - 60 * config.SCALE,
     pivot = 28 * config.SCALE,
-    fW = 68 * config.SCALE,
-    fH = 13 * config.SCALE;
-  const fL = Bodies.rectangle(config.TABLE_W * 0.3, y, fW, fH, opts);
-  const fR = Bodies.rectangle(config.TABLE_W * 0.62, y, fW, fH, opts);
+    fW = 75 * config.SCALE,
+    fH = 15 * config.SCALE;
+  const fL = Bodies.rectangle(config.TABLE_W * 0.3, y, fW, fH, {
+    ...opts,
+    chamfer: { radius: 8 * config.SCALE },
+  });
+  const fR = Bodies.rectangle(config.TABLE_W * 0.62, y, fW, fH, {
+    ...opts,
+    chamfer: { radius: 8 * config.SCALE },
+  });
   const pL = { x: config.TABLE_W * 0.3 - pivot, y };
   const pR = { x: config.TABLE_W * 0.62 + pivot, y };
   const cOpts = { stiffness: 0.9, render: { visible: false } };
@@ -892,7 +897,7 @@ export default function PinballGame() {
                   </span>
                 </div>
                 <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
-                  {card.tab ? card.snippet : `"${card.snippet}"`}
+                  {card.snippet}
                 </p>
                 {card.tab && (
                   <Link
