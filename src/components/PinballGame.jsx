@@ -315,7 +315,6 @@ function createTable(config) {
     { x: config.TABLE_W * 0.75, y: 210 },
     { x: config.TABLE_W * 0.42, y: 360 },
     { x: config.TABLE_W * 0.6, y: 370 },
-    { x: config.TABLE_W * 0.2, y: 385 },
   ];
   for (const p of pegPositions) {
     bodies.push(
@@ -371,11 +370,14 @@ function createFlippers(config) {
       category: COLLISION_CATEGORIES.FLIPPER,
       mask: COLLISION_CATEGORIES.BALL,
     },
+    // Improve collision detection
+    isSensor: false,
+    inertia: Infinity, // Prevent flippers from being pushed around
   };
   const y = config.TABLE_H - 60 * config.SCALE,
     pivot = 28 * config.SCALE,
     fW = 75 * config.SCALE,
-    fH = 15 * config.SCALE;
+    fH = 18 * config.SCALE; // Balanced thickness for collision detection
   const fL = Bodies.rectangle(config.TABLE_W * 0.3, y, fW, fH, {
     ...opts,
     chamfer: { radius: 8 * config.SCALE },
@@ -516,7 +518,13 @@ export default function PinballGame() {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const engine = Engine.create({ gravity: { x: 0, y: 0.8 } });
+    const engine = Engine.create({ 
+      gravity: { x: 0, y: 0.8 },
+      timing: {
+        timeScale: 1,
+        timestamp: 0
+      }
+    });
     engineRef.current = engine;
 
     const render = Render.create({
@@ -532,7 +540,10 @@ export default function PinballGame() {
     });
     renderRef.current = render;
 
-    const runner = Runner.create();
+    const runner = Runner.create({
+      delta: 1000 / 120, // Higher frequency for better collision detection
+      isFixed: true      // Fixed timestep for better collision detection
+    });
     runnerRef.current = runner;
 
     const table = createTable(config);
@@ -604,7 +615,6 @@ export default function PinballGame() {
         }
 
         if (drainBody && ballBody) {
-          console.log("Ball hit drain sensor - respawning");
           resetBall();
         }
       }
@@ -655,13 +665,12 @@ export default function PinballGame() {
           b._stuckTime = null;
         }
 
-        // Speed limiter
-        if (speed > 18)
-          Body.setVelocity(b, Vector.mult(Vector.normalise(b.velocity), 18));
+        // Aggressive speed limiter to prevent tunneling
+        if (speed > 16)
+          Body.setVelocity(b, Vector.mult(Vector.normalise(b.velocity), 16));
 
         // Fallback drain detection: if ball goes below the table, respawn it
         if (b.position.y > config.TABLE_H + 5) {
-          console.log("Ball fell below table - respawning via fallback");
           resetBall();
         }
       }
