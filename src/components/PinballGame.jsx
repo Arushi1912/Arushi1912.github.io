@@ -111,7 +111,7 @@ const BASE_CONFIG = {
   WALL: 14,
   BUMPER_R: 32,
   BALL_R: 10,
-  TARGET_SCORE: 1111,
+  TARGET_SCORE: 11111,
   MAX_CHARGE_MS: 1200,
   BALL_SAVE_DELAY: 2000,
   LAUNCH_VELOCITIES: { min: 8, max: 18 },
@@ -425,6 +425,7 @@ export default function PinballGame() {
   const waitingToLaunchRef = useRef(true);
 
   const [discoveredCards, setDiscoveredCards] = useState([]);
+  const [currentMobileCard, setCurrentMobileCard] = useState(null);
   const [launched, setLaunched] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [config, setConfig] = useState(getResponsiveConfig);
@@ -445,6 +446,7 @@ export default function PinballGame() {
     const target = BUMPER_TARGETS[idx];
     const snippet = getRandomFact(target.id);
 
+    // Desktop: Keep existing array logic for sidebar
     setDiscoveredCards((prev) => {
       const existing = prev.find((c) => c.id === target.id);
       if (existing) {
@@ -454,6 +456,9 @@ export default function PinballGame() {
       }
       return [...prev, { ...target, snippet, hitCount: 1 }];
     });
+
+    // Mobile: Always update to latest hit
+    setCurrentMobileCard({ ...target, snippet, hitCount: 1 });
   }, []);
 
   const parkBall = useCallback(() => {
@@ -876,44 +881,29 @@ export default function PinballGame() {
         {/* Desktop cards - absolutely positioned to the right */}
         {discoveredCards.length > 0 && (
           <div className="absolute left-full top-0 ml-4 w-52 hidden lg:flex flex-col gap-3 pt-2">
-            {discoveredCards.map((card) => {
-              const inner = (
-                <>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-slate-blue text-sm">
-                      {card.label}
-                    </span>
-                  </div>
-                  <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
-                    {card.snippet}
-                  </p>
-                  {card.tab && (
-                    <span className="text-emerald-deep text-[11px] font-medium mt-1.5 inline-block">
-                      Visit &rarr;
-                    </span>
-                  )}
-                </>
-              );
-
-              const className =
-                "animate-slide-in min-w-[160px] lg:min-w-0 bg-cream border border-gold-muted/40 rounded-xl p-3 shadow-md hover:border-gold hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer block";
-
-              return card.tab ? (
-                <Link key={card.id} to={card.route} className={className}>
-                  {inner}
-                </Link>
-              ) : (
-                <div
-                  key={card.id}
-                  className={className.replace(
-                    "cursor-pointer",
-                    "cursor-default",
-                  )}
-                >
-                  {inner}
+            {discoveredCards.map((card) => (
+              <div
+                key={card.id}
+                className="animate-slide-in bg-cream border border-gold-muted/40 rounded-xl p-3 shadow-md"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-slate-blue text-sm">
+                    {card.label}
+                  </span>
                 </div>
-              );
-            })}
+                <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
+                  {card.tab ? card.snippet : `"${card.snippet}"`}
+                </p>
+                {card.tab && (
+                  <Link
+                    to={card.route}
+                    className="text-emerald-deep text-[11px] font-medium mt-1.5 inline-block hover:text-emerald-dark hover:underline transition-colors"
+                  >
+                    Visit &rarr;
+                  </Link>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -940,52 +930,6 @@ export default function PinballGame() {
         </button>
       </div>
 
-      {/* Mobile cards - below the game */}
-      {/* Mobile cards - show only the most recent card */}
-      {discoveredCards.length > 0 && (
-        <div className="w-full lg:hidden">
-          {(() => {
-            const card = discoveredCards[discoveredCards.length - 1];
-            const inner = (
-              <>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-bold text-slate-blue text-sm">
-                    {card.label}
-                  </span>
-                </div>
-                <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
-                  {card.tab ? card.snippet : `"${card.snippet}"`}
-                </p>
-                {card.tab && (
-                  <span className="text-emerald-deep text-[11px] font-medium mt-1.5 inline-block">
-                    Visit &rarr;
-                  </span>
-                )}
-              </>
-            );
-
-            const className =
-              "animate-slide-in bg-cream border border-gold-muted/40 rounded-xl p-3 shadow-md hover:border-gold hover:shadow-lg hover:scale-[1.02] transition-all cursor-pointer block w-full";
-
-            return card.tab ? (
-              <Link key={card.id} to={card.route} className={className}>
-                {inner}
-              </Link>
-            ) : (
-              <div
-                key={card.id}
-                className={className.replace(
-                  "cursor-pointer",
-                  "cursor-default",
-                )}
-              >
-                {inner}
-              </div>
-            );
-          })()}
-        </div>
-      )}
-
       <p className="text-slate/50 text-xs text-center mt-1">
         <span className="hidden lg:inline">
           ← → to flip · Hold Space to charge &amp; launch
@@ -994,6 +938,35 @@ export default function PinballGame() {
           Tap buttons to flip · Tap table to launch
         </span>
       </p>
+      {/* Mobile cards - below the game */}
+      {/* Mobile cards - show current card */}
+      {currentMobileCard && (
+        <div className="w-full lg:hidden">
+          <div
+            key={currentMobileCard.id}
+            className="animate-slide-in bg-cream border border-gold-muted/40 rounded-xl p-3 shadow-md w-full"
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className="font-bold text-slate-blue text-sm">
+                {currentMobileCard.label}
+              </span>
+            </div>
+            <p className="text-slate/60 text-xs leading-relaxed line-clamp-3">
+              {currentMobileCard.tab
+                ? currentMobileCard.snippet
+                : `"${currentMobileCard.snippet}"`}
+            </p>
+            {currentMobileCard.tab && (
+              <Link
+                to={currentMobileCard.route}
+                className="text-emerald-deep text-[11px] font-medium mt-1.5 inline-block hover:text-emerald-dark hover:underline transition-colors"
+              >
+                Visit &rarr;
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
