@@ -50,10 +50,10 @@ const Landing = () => {
       {/* ── Pinball Section ── */}
       <div className="flex flex-col items-center mb-16">
         <h2 className="text-3xl md:text-4xl font-serif font-semibold text-slate-blue mb-2 text-center">
-          To thank you for being here &hellip;
+          Here's a fun way&hellip;
         </h2>
         <p className="text-lg text-slate/60 mb-8 text-center">
-          I made 'getting to know me' a bit more fun.
+          to get to know me better
         </p>
 
         <PinballGame />
