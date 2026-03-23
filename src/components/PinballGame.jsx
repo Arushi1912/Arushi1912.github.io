@@ -518,12 +518,12 @@ export default function PinballGame() {
   useEffect(() => {
     if (!canvasRef.current) return;
 
-    const engine = Engine.create({ 
+    const engine = Engine.create({
       gravity: { x: 0, y: 0.8 },
       timing: {
         timeScale: 1,
-        timestamp: 0
-      }
+        timestamp: 0,
+      },
     });
     engineRef.current = engine;
 
@@ -542,7 +542,7 @@ export default function PinballGame() {
 
     const runner = Runner.create({
       delta: 1000 / 120, // Higher frequency for better collision detection
-      isFixed: true      // Fixed timestep for better collision detection
+      isFixed: true, // Fixed timestep for better collision detection
     });
     runnerRef.current = runner;
 
@@ -873,8 +873,8 @@ export default function PinballGame() {
               <span className="text-cream text-2xl font-serif font-bold mb-2 drop-shadow-lg">
                 Ready?
               </span>
-              <span className="text-cream/80 text-sm font-medium drop-shadow">
-                Hold Space to charge, release to launch
+              <span className="text-cream/80 text-lg font-medium drop-shadow">
+                ← → to flip · Hold Space to charge & launch
               </span>
             </div>
           )}
@@ -944,13 +944,8 @@ export default function PinballGame() {
         </button>
       </div>
 
-      <p className="text-slate/50 text-xs text-center mt-1">
-        <span className="hidden lg:inline">
-          ← → to flip · Hold Space to charge &amp; launch
-        </span>
-        <span className="lg:hidden">
-          Tap buttons to flip · Tap table to launch
-        </span>
+      <p className="text-slate/50 text-sm text-center mt-1 lg:hidden">
+        Tap buttons to flip · Tap table to launch
       </p>
       {/* Mobile cards - below the game */}
       {/* Mobile cards - show current card */}

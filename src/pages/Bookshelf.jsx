@@ -1,56 +1,59 @@
 const Bookshelf = () => {
   const currentYear = 2026;
-  
+
   const currentlyReading = [
     {
-      title: 'Just Add Water: My Swimming Life',
-      author: 'Katie Ledecky',
-      cover: 'https://images-na.ssl-images-amazon.com/images/P/1668060205.01.L.jpg',
-      progress: 'Currently Reading',
-      thoughts: 'If anyone wants to learn the art of self improvement, Katie Ledecky is your go to.',
-    },
-    {
-      title: 'The Upanishads',
-      author: 'Penguin Classics',
-      cover: 'https://covers.openlibrary.org/b/isbn/9780140441635-M.jpg',
-      progress: 'Currently Reading',
-      thoughts: '',
+      title: "Just Add Water: My Swimming Life",
+      author: "Katie Ledecky",
+      cover:
+        "https://images-na.ssl-images-amazon.com/images/P/1668060205.01.L.jpg",
+      progress: "Currently Reading",
+      thoughts:
+        "If anyone wants to learn the art of self improvement, Katie Ledecky is your go to.",
     },
   ];
 
   const previouslyReadThisYear = [
-    // Add any books you've finished in 2026 here
+    {
+      title: "The Upanishads",
+      author: "Penguin Classics",
+      cover: "https://covers.openlibrary.org/b/isbn/9780140441635-M.jpg",
+      rating: 5,
+      thoughts:
+        "I truly enjoyed the book! Reading the Upanishads out loud, as the author requests, made it an almost hypnotic, poetic experience. Best enjoyed with some interest and familiarity with Vedic literature.",
+    },
   ];
 
   const booksByYear = {
     2025: [
       {
-        title: 'Becoming',
-        author: 'Michelle Obama',
-        cover: 'https://covers.openlibrary.org/b/isbn/9781524763138-M.jpg',
+        title: "Becoming",
+        author: "Michelle Obama",
+        cover: "https://covers.openlibrary.org/b/isbn/9781524763138-M.jpg",
         rating: 5,
-        thoughts: '',
+        thoughts: "",
       },
       {
-        title: 'Why Not Me?',
-        author: 'Mindy Kaling',
-        cover: 'https://covers.openlibrary.org/b/isbn/9780804138161-M.jpg',
+        title: "Why Not Me?",
+        author: "Mindy Kaling",
+        cover: "https://covers.openlibrary.org/b/isbn/9780804138161-M.jpg",
         rating: 5,
-        thoughts: '',
+        thoughts: "",
       },
       {
-        title: 'Think and Grow Rich',
-        author: 'Napoleon Hill',
-        cover: 'https://covers.openlibrary.org/b/isbn/9781585424337-M.jpg',
+        title: "Think and Grow Rich",
+        author: "Napoleon Hill",
+        cover: "https://covers.openlibrary.org/b/isbn/9781585424337-M.jpg",
         rating: 4,
-        thoughts: '',
+        thoughts: "",
       },
       {
-        title: 'Deep Work',
-        author: 'Cal Newport',
-        cover: 'https://covers.openlibrary.org/b/isbn/9781455586691-M.jpg',
+        title: "Deep Work",
+        author: "Cal Newport",
+        cover: "https://covers.openlibrary.org/b/isbn/9781455586691-M.jpg",
         rating: 5,
-        thoughts: 'Transformed how I approach focused work and productivity. Essential reading for anyone in the knowledge economy.',
+        thoughts:
+          "Transformed how I approach focused work and productivity. Essential reading for anyone in the knowledge economy.",
       },
     ],
   };
@@ -77,7 +80,10 @@ const Bookshelf = () => {
 
           <div className="space-y-8">
             {currentlyReading.map((book, index) => (
-              <div key={index} className="bg-beige border border-sage/20 overflow-hidden">
+              <div
+                key={index}
+                className="bg-beige border border-sage/20 overflow-hidden"
+              >
                 <div className="md:flex">
                   <div className="md:w-1/4">
                     <img
@@ -98,7 +104,8 @@ const Bookshelf = () => {
                     </div>
                     {book.thoughts && (
                       <p className="text-slate/70 leading-relaxed">
-                        <span className="font-medium">My thoughts:</span> {book.thoughts}
+                        <span className="font-medium">My thoughts:</span>{" "}
+                        {book.thoughts}
                       </p>
                     )}
                   </div>
@@ -117,10 +124,7 @@ const Bookshelf = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {previouslyReadThisYear.map((book, index) => (
-                <div
-                  key={index}
-                  className="bg-beige border border-sage/20"
-                >
+                <div key={index} className="bg-beige border border-sage/20">
                   <div className="flex gap-6 p-6">
                     <div className="w-24 h-36 flex-shrink-0">
                       <img
@@ -140,7 +144,7 @@ const Bookshelf = () => {
                         {[...Array(5)].map((_, i) => (
                           <svg
                             key={i}
-                            className={`w-4 h-4 ${i < book.rating ? 'text-gold fill-gold' : 'text-sage/40'}`}
+                            className={`w-4 h-4 ${i < book.rating ? "text-gold fill-gold" : "text-sage/40"}`}
                             viewBox="0 0 24 24"
                             fill="currentColor"
                           >
@@ -153,7 +157,8 @@ const Bookshelf = () => {
                   {book.thoughts && (
                     <div className="px-6 pb-6">
                       <p className="text-slate/70 text-sm leading-relaxed">
-                        <span className="font-medium">My thoughts:</span> {book.thoughts}
+                        <span className="font-medium">My thoughts:</span>{" "}
+                        {book.thoughts}
                       </p>
                     </div>
                   )}
@@ -174,10 +179,7 @@ const Bookshelf = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {books.map((book, index) => (
-                  <div
-                    key={index}
-                    className="bg-beige border border-sage/20"
-                  >
+                  <div key={index} className="bg-beige border border-sage/20">
                     <div className="flex gap-6 p-6">
                       <div className="w-24 h-36 flex-shrink-0">
                         <img
@@ -197,7 +199,7 @@ const Bookshelf = () => {
                           {[...Array(5)].map((_, i) => (
                             <svg
                               key={i}
-                              className={`w-4 h-4 ${i < book.rating ? 'text-gold fill-gold' : 'text-sage/40'}`}
+                              className={`w-4 h-4 ${i < book.rating ? "text-gold fill-gold" : "text-sage/40"}`}
                               viewBox="0 0 24 24"
                               fill="currentColor"
                             >
@@ -210,7 +212,8 @@ const Bookshelf = () => {
                     {book.thoughts && (
                       <div className="px-6 pb-6">
                         <p className="text-slate/70 text-sm leading-relaxed">
-                          <span className="font-medium">My thoughts:</span> {book.thoughts}
+                          <span className="font-medium">My thoughts:</span>{" "}
+                          {book.thoughts}
                         </p>
                       </div>
                     )}
