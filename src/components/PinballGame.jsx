@@ -873,8 +873,13 @@ export default function PinballGame() {
               <span className="text-cream text-2xl font-serif font-bold mb-2 drop-shadow-lg">
                 Ready?
               </span>
-              <span className="text-cream/80 text-lg font-medium drop-shadow">
-                ← → to flip · Hold Space to charge & launch
+              <span className="text-cream/80 font-medium drop-shadow">
+                <span className="hidden lg:inline text-lg">
+                  ← → to flip · Hold Space to charge & launch
+                </span>
+                <span className="lg:hidden text-sm">
+                  Tap buttons to flip · Tap table to launch
+                </span>
               </span>
             </div>
           )}
@@ -944,9 +949,6 @@ export default function PinballGame() {
         </button>
       </div>
 
-      <p className="text-slate/50 text-sm text-center mt-1 lg:hidden">
-        Tap buttons to flip · Tap table to launch
-      </p>
       {/* Mobile cards - below the game */}
       {/* Mobile cards - show current card */}
       {currentMobileCard && (
